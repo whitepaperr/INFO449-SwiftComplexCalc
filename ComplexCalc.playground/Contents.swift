@@ -28,6 +28,72 @@ print("Welcome back to the UW Calculator")
 //: IMPORTANT: If any tests are commented out, you will be graded a zero (0)! You should never be in the habit of eliminating tests to make the code pass.
 //:
 class Calculator {
+    // Basic Arithmetic Operations for Two Integers
+    func add(lhs: Int, rhs: Int) -> Int {
+        return lhs + rhs
+    }
+
+    func subtract(lhs: Int, rhs: Int) -> Int {
+        return lhs - rhs
+    }
+
+    func multiply(lhs: Int, rhs: Int) -> Int {
+        return lhs * rhs
+    }
+
+    func divide(lhs: Int, rhs: Int) -> Int {
+        guard rhs != 0 else { return 0 } // Avoid division by zero
+        return lhs / rhs
+    }
+
+    // Operations for Arrays of Integers
+    func add(_ args: [Int]) -> Int {
+        return args.reduce(0, +)
+    }
+
+    func multiply(_ args: [Int]) -> Int {
+        return args.reduce(1, *)
+    }
+
+    func count(_ args: [Int]) -> Int {
+        return args.count
+    }
+
+    func avg(_ args: [Int]) -> Int {
+        guard !args.isEmpty else { return 0 }
+        return args.reduce(0, +) / args.count
+    }
+
+    // Custom Operations Using Higher-Order Functions
+    func mathOp(lhs: Int, rhs: Int, op: (Int, Int) -> Int) -> Int {
+        return op(lhs, rhs)
+    }
+
+    func mathOp(args: [Int], beg: Int, op: (Int, Int) -> Int) -> Int {
+        return args.reduce(beg, op)
+    }
+
+    // Operations on Cartesian Points (Tuples)
+    func add(lhs: (Int, Int), rhs: (Int, Int)) -> (Int, Int) {
+        return (lhs.0 + rhs.0, lhs.1 + rhs.1)
+    }
+
+    func subtract(lhs: (Int, Int), rhs: (Int, Int)) -> (Int, Int) {
+        return (lhs.0 - rhs.0, lhs.1 - rhs.1)
+    }
+
+    // Operations on Cartesian Points (Dictionaries)
+    func add(lhs: [String: Int], rhs: [String: Int]) -> [String: Int] {
+        let xSum = (lhs["x"] ?? 0) + (rhs["x"] ?? 0)
+        let ySum = (lhs["y"] ?? 0) + (rhs["y"] ?? 0)
+        return ["x": xSum, "y": ySum]
+    }
+
+    func subtract(lhs: [String: Int], rhs: [String: Int]) -> [String: Int] {
+        let xDiff = (lhs["x"] ?? 0) - (rhs["x"] ?? 0)
+        let yDiff = (lhs["y"] ?? 0) - (rhs["y"] ?? 0)
+        return ["x": xDiff, "y": yDiff]
+    }
 }
 
 //: Don't change the name of this object (`calc`); it's used in all the tests.
@@ -43,6 +109,27 @@ let calc = Calculator()
 //: Keep in mind that writing new tests may reveal ambiguity in the specification above--if that's the case, document the ambiguity, declare what you think *should* happen, and write the test to test for it.
 
 // ===== Your tests go here
+// Test with Negative Numbers
+calc.add(lhs: -2, rhs: -4) == -6
+calc.multiply(lhs: -3, rhs: 4) == -12
+calc.subtract(lhs: -5, rhs: -5) == 0
+calc.divide(lhs: -10, rhs: -2) == 5
+calc.mathOp(lhs: -3, rhs: 3, op: { $0 - $1 }) == -6
+
+// Average and Count with Empty Arrays
+calc.count([]) == 0
+calc.avg([]) == 0
+
+// Addition and Multiplication with Empty Arrays
+calc.add([]) == 0
+calc.multiply([]) == 1
+
+// Operations on Cartesian Points with Missing Keys
+calc.add(lhs: ["x": 1], rhs: ["y": 2]) == ["x": 1, "y": 2]
+calc.add(lhs: ["x": -5, "y": 10], rhs: ["x": 5, "y": -10]) == ["x": 0, "y": 0]
+calc.subtract(lhs: ["x": 3], rhs: ["y": 3]) == ["x": 3, "y": -3]
+
+
 
 //: ---
 //: ## Test code block
@@ -52,7 +139,7 @@ calc.subtract(lhs: 2, rhs: 2) == 0
 calc.multiply(lhs: 2, rhs: 2) == 4
 calc.divide(lhs: 2, rhs: 2) == 1
 
-calc.mathOp(lhs: 5, rhs: 5, op: { (lhs: Int, rhs: Int) -> Int in (lhs + rjs) + (lhs * rhs) }) == 35
+calc.mathOp(lhs: 5, rhs: 5, op: { (lhs: Int, rhs: Int) -> Int in (lhs + rhs) + (lhs * rhs) }) == 35
     // This style is one way of writing an anonymous function
 calc.mathOp(lhs: 10, rhs: -5, op: { ($0 + $1) + ($0 - $1) }) == 20
     // This is the second, more terse, style; either works
